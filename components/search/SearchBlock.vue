@@ -2,6 +2,7 @@
   <ais-instant-search
     :search-client="searchClient"
     :index-name="collection"
+    :initial-ui-state="initialUiState"
   >
     <v-container fluid>
       <v-row>
@@ -45,6 +46,7 @@
               }"
             >
               <v-select
+                v-model="selectedTags"
                 :items="items"
                 label="Жанры"
                 multiple
@@ -283,8 +285,18 @@ export default {
 
   data () {
     return {
-      currentPage: 1,
-      searchClient: typesenseInstantsearchAdapter.searchClient
+      currentPage: 5,
+      searchClient: typesenseInstantsearchAdapter.searchClient,
+      initialUiState: {
+        songs: {
+          query: this.$route.query.q,
+          // query_by: 'name, content, performer, location, content_nohtml',
+          refinementList: {
+            ...(this.$route.query.tag && { tags: this.$route.query.tag })
+          }
+        }
+      },
+      selectedTags: this.$route.query.tag
     }
   },
 
